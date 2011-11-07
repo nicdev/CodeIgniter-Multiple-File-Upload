@@ -6,8 +6,8 @@
 		
 class MY_Upload extends CI_Upload {
 	
-		public function do_multi_upload( $field = 'userfile' ){
-		
+	public function do_multi_upload( $field = 'userfile', $return_info = TRUE ){
+
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if ( ! isset($_FILES[$field]))
 		{
@@ -25,7 +25,7 @@ class MY_Upload extends CI_Upload {
 		//Multiple file upload
 		if( is_array( $_FILES[$field] ) )
 		{
-			
+
 			$count = count($_FILES[$field]['name']); //Number of files to process
 			
 			error_log('count => ' . $count );
@@ -202,9 +202,23 @@ class MY_Upload extends CI_Upload {
 				$this->set_image_properties($this->upload_path.$this->file_name);
 		
 				
+				if( $return_info === TRUE )
+				{
+					
+					$return_value[] = $this->data();
+				
+				}
+				else
+				{
+				
+					$return_value = TRUE;
+				
+				}
+				
+				
 			}
 			
-			return TRUE;
+			return $return_value;
 		
 		}
 		else //Single file upload, rely on native CI upload class
