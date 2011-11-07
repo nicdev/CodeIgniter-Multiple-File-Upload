@@ -13,9 +13,9 @@ This version is a quick and dirty first pass for a project I'm currently working
 
 __Installation__
 Copy MY\_Upload.php to your application/libraries directory.
-If you are using a prefix other than MY\_ for your classes and/or alternative file paths, adjust accordingly.
+If you are using a prefix other than MY_ for your classes and/or alternative file paths, adjust accordingly.
 
 __Usage__
-Load the Upload class as usual, in your controller call the function `do\_multi\_upload()`. If you are uploading a single file, it'll default to the regular `do_upload()` method. 
+Load the Upload class as usual, in your controller call the function `do_multi_upload()`. If you are uploading a single file, it'll default to the regular `do_upload()` method. 
 In the form, set field names to array (e.g. name="userfile[]")
 
