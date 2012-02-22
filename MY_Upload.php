@@ -1,12 +1,36 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
+
+ /**
+ * MY_Upload
  * Exenstion File Uploading Class
+ * 
+ * 	Installation
+	============
+	Copy MY_Upload.php to your application/libraries directory. If you are using a prefix other than MY_ for your classes and/or alternative file paths, adjust accordingly.
+
+	Usage Load the Upload class as usual, in your controller call the function do_multi_upload(). If you are uploading a single file, it'll default to the regular do_upload() method. In the form, set field names to array (e.g. name="userfile[]")
+
+ * 
+ * 
+ * 
+ * @author Nic Rosental
+ * @version $Id$
+ * @access public
  */
-		
 class MY_Upload extends CI_Upload {
 	
-	public function do_multi_upload( $field = 'userfile', $return_info = TRUE ){
+	/**
+	 * MY_Upload::do_multi_upload()
+	 * 
+	 * @param string $field				Fields to fetch files from
+	 * @param bool $return_info			Return array with all the upload data
+	 * @param string $new_file_name		Destination file name format. you can use `whatever_you_want{i}` where {i} represents the current iteration in the loop. this will allow you to specify myfile[5], myfile[10] etc' and
+	 * 									to use these array keys for the final file.
+	 * @param bool $lowercase_ext		Should we lowercase the file extension.
+	 * @return
+	 */
+	public function do_multi_upload( $field = 'userfile', $return_info = TRUE, $new_file_name = '' ,$lowercase_ext = TRUE){
 
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if ( ! isset($_FILES[$field]))
@@ -27,10 +51,10 @@ class MY_Upload extends CI_Upload {
 		{
 
 			$count = count($_FILES[$field]['name']); //Number of files to process
-			
+
 			error_log('count => ' . $count );
-			
-			for($i = 0; $i < $count; $i++)
+
+			foreach ( $_FILES[$field]['name'] as $i => $value )
 			{
 			
 				// Was the file able to be uploaded? If not, determine the reason why.
@@ -84,6 +108,16 @@ class MY_Upload extends CI_Upload {
 					return FALSE;
 				}
 				
+				// Lowercase extension
+				if ( $lowercase_ext == TRUE ) {
+					$this->file_ext = strtolower($this->file_ext);
+				}
+
+				// Rename destination filename
+				if ( !empty($new_file_name) ) {
+					$this->file_name = str_replace('{i}',$i,$new_file_name) . $this->file_ext;
+				}
+
 				// if we're overriding, let's now make sure the new name and type is allowed
 				if ($this->_file_name_override != '')
 				{
@@ -131,7 +165,7 @@ class MY_Upload extends CI_Upload {
 	
 				// Sanitize the file name for security
 				$this->file_name = $this->clean_file_name($this->file_name);
-		
+
 				// Truncate the file name if it's too long
 				if ($this->max_filename > 0)
 				{
@@ -234,5 +268,3 @@ class MY_Upload extends CI_Upload {
 	}
 
 }
-
-?>
