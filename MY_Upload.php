@@ -11,33 +11,54 @@ class MY_Upload extends CI_Upload {
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if ( ! isset($_FILES[$field]))
 		{
+			
 			$this->set_error('upload_no_file_selected');
 			return FALSE;
+			
+		}
+		
+		//If not every file filled was used, clear the empties
+		
+		foreach( $_FILES[$field]['name'] as $k => $n )
+		{
+	
+			if( empty( $n ) )
+			{
+			
+				foreach( $_FILES[$field] as $kk => $f )
+				{
+				
+					unset( $_FILES[$field][$kk][$k] );
+					
+				}
+								
+			}
+			
 		}
 		
 		// Is the upload path valid?
-		if ( ! $this->validate_upload_path($field))
+		if ( ! $this->validate_upload_path($field) )
 		{
+
 			// errors will already be set by validate_upload_path() so just return FALSE
 			return FALSE;
 		}
-		
+
 		//Multiple file upload
 		if( is_array( $_FILES[$field] ) )
 		{
-
-			$count = count($_FILES[$field]['name']); //Number of files to process
+	
+			//$count = count($_FILES[$field]['name']); //Number of files to process
 			
-			error_log('count => ' . $count );
-			
-			for($i = 0; $i < $count; $i++)
+			foreach( $_FILES[$field]['name'] as $k => $file )
 			{
-			
+				
 				// Was the file able to be uploaded? If not, determine the reason why.
-				if ( ! is_uploaded_file($_FILES[$field]['tmp_name'][$i]))
+				if ( ! is_uploaded_file($_FILES[$field]['tmp_name'][$k] ) )
 				{
-					$error = ( ! isset($_FILES[$field]['error'][$i])) ? 4 : $_FILES[$field]['error'][$i];
-		
+					
+					$error = ( ! isset($_FILES[$field]['error'][$k])) ? 4 : $_FILES[$field]['error'][$k];
+					
 					switch($error)
 					{
 						case 1:	// UPLOAD_ERR_INI_SIZE
@@ -69,11 +90,11 @@ class MY_Upload extends CI_Upload {
 				}
 								
 				// Set the uploaded data as class variables
-				$this->file_temp = $_FILES[$field]['tmp_name'][$i];
-				$this->file_size = $_FILES[$field]['size'][$i];
-				$this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $_FILES[$field]['type'][$i]);
+				$this->file_temp = $_FILES[$field]['tmp_name'][$k];
+				$this->file_size = $_FILES[$field]['size'][$k];
+				$this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $_FILES[$field]['type'][$k]);
 				$this->file_type = strtolower(trim(stripslashes($this->file_type), '"'));
-				$this->file_name = $this->_prep_filename($_FILES[$field]['name'][$i]);
+				$this->file_name = $this->_prep_filename($_FILES[$field]['name'][$k]);
 				$this->file_ext	 = $this->get_extension($this->file_name);
 				$this->client_name = $this->file_name;
 				
@@ -205,7 +226,7 @@ class MY_Upload extends CI_Upload {
 				if( $return_info === TRUE )
 				{
 					
-					$return_value[] = $this->data();
+					$return_value[$k] = $this->data();
 				
 				}
 				else
