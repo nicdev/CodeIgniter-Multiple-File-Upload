@@ -6,7 +6,7 @@
 		
 class MY_Upload extends CI_Upload {
 	
-	public function do_multi_upload( $field = 'userfile', $return_info = TRUE ){
+	public function do_multi_upload( $field = 'userfile', $filenames = NULL, $return_info = TRUE ){
 
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if ( ! isset($_FILES[$field]))
@@ -94,7 +94,16 @@ class MY_Upload extends CI_Upload {
 				$this->file_size = $_FILES[$field]['size'][$k];
 				$this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $_FILES[$field]['type'][$k]);
 				$this->file_type = strtolower(trim(stripslashes($this->file_type), '"'));
-				$this->file_name = $this->_prep_filename($_FILES[$field]['name'][$k]);
+				
+				if(empty($filenames))
+				{
+					$this->file_name = $this->_prep_filename($_FILES[$field]['name'][$k]);					
+				}
+				else
+				{
+					$this->file_name = $this->_prep_filename($filenames[$k]);
+				}
+				
 				$this->file_ext	 = $this->get_extension($this->file_name);
 				$this->client_name = $this->file_name;
 				
