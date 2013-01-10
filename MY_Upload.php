@@ -6,7 +6,7 @@
 		
 class MY_Upload extends CI_Upload {
 	
-	public function do_multi_upload( $field = 'userfile', $filenames = NULL, $return_info = TRUE ){
+	public function do_multi_upload( $field = 'userfile', $return_info = TRUE, $filenames = NULL ){
 
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if ( ! isset($_FILES[$field]))
