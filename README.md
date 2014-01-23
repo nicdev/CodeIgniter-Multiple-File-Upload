@@ -1,3 +1,6 @@
+#PLEASE READ: 
+This repo is no longer maintained. Please see @anuragrath's [fork](https://github.com/anuragrath/CodeIgniter-Multiple-File-Upload) for the latest version. 
+
 #CodeIgniter Multiple Upload Library
 Just an extension to the existing Upload class to take advantage of multiple uploads in one form field
 
