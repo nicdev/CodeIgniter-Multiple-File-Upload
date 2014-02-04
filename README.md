@@ -4,6 +4,12 @@ This repo is no longer maintained. Please see @anuragrath's [fork](https://githu
 #CodeIgniter Multiple Upload Library
 Just an extension to the existing Upload class to take advantage of multiple uploads in one form field
 
+##v.0.3: January 10, 2012
+
+__Changes__
+Adding the support of custom file names passed as an array of strings (ex image1.jpg, image2.jpg). This would help generate the filenames based on parameters like Ids of Product etc.
+
+
 ##v.0.2: November 7, 2011
 
 __Changes__
